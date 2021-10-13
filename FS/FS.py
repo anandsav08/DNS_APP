@@ -14,14 +14,11 @@ REGISTER_DICT = {
 }
 
 def getFibonacciKeyFromSequence(n):
-    if(n == 1 or n == 2):
-        return 1
-    result = []
-    result.append(1)
-    result.append(1)
-    for i in range(2,int(n)):
-        result.append(result[i-1]+result[i-2])
-    return result[-1]
+    prev, cur = 0, 1
+    for i in range(n):
+        temp = prev
+        prev, cur = cur, temp + cur    
+    return cur
 
 @app.route('/fibonacci')
 def index():
