@@ -13,22 +13,22 @@ REGISTER_DICT = {
     "as_port" : ""
 }
 
-def getFibonacci(num):
-    if(num == 1 or num == 2):
+def getFibonacciKeyFromSequence(n):
+    if(n == 1 or n == 2):
         return 1
-    seq = []
-    seq.append(1)
-    seq.append(1)
-    for i in range(2,int(num)):
-        seq.append(seq[i-1]+seq[i-2])
-    return seq[-1]
+    result = []
+    result.append(1)
+    result.append(1)
+    for i in range(2,int(n)):
+        result.append(result[i-1]+result[i-2])
+    return result[-1]
 
 @app.route('/fibonacci')
 def index():
-    number = request.args['number']
-    ans = getFibonacci(number)
-    key = 'Fibonacci '+str(number)
-    return {key:ans}
+    queryNum = request.args['number']
+    sequenceRes = getFibonacciKeyFromSequence(queryNum)
+    queryFromUserBrowser = 'Fibonacci '+str(queryNum)
+    return {queryFromUserBrowser:sequenceRes}
 
 
 @app.route('/register', methods = ['PUT','GET'])
