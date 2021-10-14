@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 #curl --request PUT http://localhost:9090/register --header "Content-Type:application/json" --data '{"hostname":"fibonacci.com","ip":"0.0.0.0","as_ip":"0.0.0.0","as_port":"53533"}'
 # curl --request PUT http://0.0.0.0:9090/register --header "Content-Type:application/json" --data '{"hostname":"fibonacci.com","ip":"172.18.0.3","as_ip":"172.18.0.4","as_port":"53533"}'
-REGISTER_DICT = {
+tempDict = {
     "hostname" : "",
     "ip" : "",
     "as_ip" : "",
@@ -35,11 +35,11 @@ def register():
             print("request: ",request.data)
             data = json.loads(request.data.decode('utf-8'))
             print("data: ",data)
-            REGISTER_DICT['hostname'] = str(data['hostname'])
-            REGISTER_DICT['ip'] = str(data['ip'])
-            REGISTER_DICT['as_ip'] = str(data['as_ip'])
-            REGISTER_DICT['as_port'] = str(data['as_port'])
-            print("dict: ",REGISTER_DICT)
+            tempDict['hostname'] = str(data['hostname'])
+            tempDict['ip'] = str(data['ip'])
+            tempDict['as_ip'] = str(data['as_ip'])
+            tempDict['as_port'] = str(data['as_port'])
+            print("dict: ",tempDict)
         except Exception as e:
             abort(400)
     response = registerOnAuthoritativeServer()
@@ -49,8 +49,8 @@ def register():
 def registerOnAuthoritativeServer():
     print("IN registerOn")
     bufferSize = 1024
-    as_ip = REGISTER_DICT['as_ip']
-    as_port = REGISTER_DICT['as_port']
+    as_ip = tempDict['as_ip']
+    as_port = tempDict['as_port']
     server = (as_ip,int(as_port))
     print("SERVER address: ",server)
     fs_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -63,7 +63,7 @@ def registerOnAuthoritativeServer():
 
 def generateMessage():
     message = ""
-    message = "TYPE=A\nNAME="+REGISTER_DICT['hostname']+"\nVALUE="+REGISTER_DICT['ip']+"\nTTL=10"
+    message = "TYPE=A\nNAME="+tempDict['hostname']+"\nVALUE="+tempDict['ip']+"\nTTL=10"
     print("MESSAGE: ",message)
     return message
 
